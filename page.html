@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>음주운전 관련 페이지</title>
+  <style>
+    /* 기본 리셋 및 스타일 */
+    body, h1, h2, p, div, form, input, button {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+    }
+    .section {
+      padding: 40px 20px;
+      min-height: 100vh;
+      border-bottom: 1px solid #ccc;
+    }
+    /* Section 2: 좌측 그래프, 우측 입력폼 (반응형) */
+    .custom-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .custom-graph, .custom-input {
+      flex: 1 1 300px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    .custom-input form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .custom-input label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .custom-input input {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .custom-input button {
+      padding: 10px;
+      border: none;
+      background-color: #007BFF;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .custom-input button:hover {
+      background-color: #0056b3;
+    }
+    /* Section 3: rose 차트와 설명 */
+    .rose-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .rose-chart, .rose-description {
+      flex: 1 1 300px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    @media (max-width: 768px) {
+      .custom-container,
+      .rose-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Section 1: 일반적인 혈중 알코올 농도 시간 흐름 그래프 -->
+  <section id="section-general" class="section">
+    <h1>일반적인 혈중 알코올 농도 변화</h1>
+    <p>이곳에 팀원이 구현한 일반 케이스의 혈중 알코올 농도 시간 변화 그래프가 표시됩니다.</p>
+    <!-- 팀원이 구현한 일반 그래프 코드가 삽입될 자리 -->
+    <div id="generalGraph">
+      <!-- [Placeholder] 일반 그래프 코드 삽입 -->
+    </div>
+  </section>
+
+  <!-- Section 2: 사용자 입력 기반 맞춤형 그래프 -->
+  <section id="section-custom" class="section">
+    <h1>맞춤형 혈중 알코올 농도 그래프</h1>
+    <div class="custom-container">
+      <!-- 좌측: 맞춤형 그래프 컨테이너 -->
+      <div class="custom-graph">
+        <h2>그래프</h2>
+        <!-- 팀원이 구현한 맞춤형 그래프 코드가 삽입될 자리 -->
+        <div id="customGraph">
+          <!-- [Placeholder] 맞춤형 그래프 코드 삽입 -->
+        </div>
+      </div>
+      <!-- 우측: 사용자 입력 UI -->
+      <div class="custom-input">
+        <h2>입력 정보</h2>
+        <form id="userInputForm">
+          <div>
+            <label for="drinkingAmount">음주량 (잔):</label>
+            <input type="number" id="drinkingAmount" name="drinkingAmount" placeholder="예: 3" required>
+          </div>
+          <div>
+            <label for="alcoholContent">술의 도수 (%):</label>
+            <input type="number" id="alcoholContent" name="alcoholContent" placeholder="예: 40" required>
+          </div>
+          <div>
+            <label for="bodyWeight">체중 (kg):</label>
+            <input type="number" id="bodyWeight" name="bodyWeight" placeholder="예: 70" required>
+          </div>
+          <button type="submit">그래프 그리기</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: 음주운전 사망자 통계 (rose 차트와 설명) -->
+  <section id="section-rose" class="section">
+    <h1>음주운전 사망자 통계</h1>
+    <div class="rose-container">
+      <!-- 좌측: rose 차트 컨테이너 -->
+      <div class="rose-chart" id="roseChart">
+        <h2>Rose 차트</h2>
+        <!-- 팀원이 구현한 rose 차트 코드가 삽입될 자리 -->
+        <!-- [Placeholder] rose 차트 코드 삽입 -->
+      </div>
+      <!-- 우측: 차트에 대한 설명 -->
+      <div class="rose-description">
+        <h2>설명</h2>
+        <p>
+          이 차트는 교통사고 사망자 중 음주운전으로 인한 사망자 비율을 시각적으로 보여줍니다.
+          음주운전의 위험성과 관련 통계에 대한 상세 설명이 이곳에 제공될 예정입니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Optional: 사용자 입력 폼 제출 이벤트 처리 (팀원의 코드와 연동 필요) -->
+  <script>
+    document.getElementById('userInputForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      // 사용자 입력값 가져오기
+      const drinkingAmount = document.getElementById('drinkingAmount').value;
+      const alcoholContent = document.getElementById('alcoholContent').value;
+      const bodyWeight = document.getElementById('bodyWeight').value;
+      
+      console.log('음주량:', drinkingAmount, '술의 도수:', alcoholContent, '체중:', bodyWeight);
+      
+      // 팀원이 구현한 맞춤형 그래프 렌더링 함수를 호출할 부분입니다.
+      // 예: renderCustomGraph(drinkingAmount, alcoholContent, bodyWeight);
+    });
+  </script>
+</body>
+</html>
