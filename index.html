@@ -66,7 +66,8 @@ layout: null
       align-items: stretch;
       width: 100%;
     }
-    .custom-graph, .custom-input, .rose-chart, .rose-description {
+    /* 원래 카드 스타일 (맞춤형 입력 박스, rose 차트, 설명 등) */
+    .custom-input, .rose-chart, .rose-description {
       flex: 1;
       min-width: 300px;
       padding: 20px;
@@ -74,6 +75,16 @@ layout: null
       border-radius: 10px;
       background-color: #3A5F4C; /* 약간 밝은 초록 계열 카드 */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    /* 맞춤형 그래프 영역: 카드 스타일 제거 및 왼쪽 영역에 가득 채우기 */
+    .custom-graph {
+      flex: 2;  /* 입력 박스보다 넓게 */
+      min-width: 300px;
+      padding: 0;        /* 패딩 제거 */
+      border: none;      /* 테두리 제거 */
+      border-radius: 0;  /* 둥근 모서리 제거 */
+      background: transparent; /* 배경 제거 */
+      box-shadow: none;  /* 그림자 제거 */
     }
     /* 사용자 입력 폼 스타일 */
     .custom-input form {
@@ -147,14 +158,14 @@ layout: null
     <div class="fade-in">
       <h1>맞춤형 혈중 알코올 농도 그래프</h1>
       <div class="custom-container">
-        <!-- 좌측: 맞춤형 그래프 영역 -->
+        <!-- 좌측: 맞춤형 그래프 영역 (박스 스타일 제거 및 가득 채움) -->
         <div class="custom-graph">
-          <h2>그래프 영역</h2>
+          <!-- 여기에 팀원이 구현한 맞춤형 그래프 코드가 가득 채워져 삽입됩니다. -->
           <div id="customGraph">
             <!-- [Placeholder] 맞춤형 그래프 코드 삽입 -->
           </div>
         </div>
-        <!-- 우측: 사용자 입력 폼 -->
+        <!-- 우측: 사용자 입력 폼 (기존 스타일 유지) -->
         <div class="custom-input">
           <h2>정보 입력</h2>
           <form id="userInputForm">
