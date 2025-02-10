@@ -28,8 +28,8 @@ layout: null
     body {
       font-family: 'Noto Sans KR', sans-serif;
       line-height: 1.6;
-      background-color: #FAF3E0; /* 소주 느낌의 부드러운 크림톤 */
-      color: #3C2F2F;  /* 따뜻한 다크 브라운 계열 */
+      background-color: #2E473B; /* 어두운 초록 계열 배경 */
+      color: #F0F0F0;  /* 밝은 텍스트 색상 */
       height: 100%;
       overflow-y: scroll;
     }
@@ -43,15 +43,19 @@ layout: null
       align-items: center;
       padding: 20px;
     }
+    h1, h2 {
+      color: #F0F0F0;
+      text-align: center;
+    }
     h1 {
       margin-bottom: 20px;
       font-size: 2em;
-      text-align: center;
     }
     p {
       margin-bottom: 20px;
       font-size: 1.1em;
       text-align: center;
+      color: #D0D0D0;
     }
     /* 레이아웃 컨테이너 (맞춤형 그래프, rose 차트 섹션 내부) */
     .custom-container, .rose-container {
@@ -66,9 +70,10 @@ layout: null
       flex: 1;
       min-width: 300px;
       padding: 20px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 10px;
-      background-color: #fff; /* 섹션 내 콘텐츠 영역은 흰색 배경 */
+      background-color: #3A5F4C; /* 약간 밝은 초록 계열 카드 */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     }
     /* 사용자 입력 폼 스타일 */
     .custom-input form {
@@ -79,21 +84,24 @@ layout: null
     .custom-input label {
       font-weight: bold;
       margin-bottom: 5px;
+      color: #F0F0F0;
     }
     .custom-input input {
       padding: 12px;
       font-size: 1em;
-      border: 1px solid #ccc;
+      border: 1px solid rgba(255,255,255,0.5);
       border-radius: 6px;
       transition: border 0.3s;
+      background-color: #fff;
+      color: #333;
     }
     .custom-input input:focus {
-      border-color: #007BFF;
+      border-color: #4CAF50;
       outline: none;
     }
     .custom-input button {
       padding: 12px;
-      background-color: #007BFF;
+      background-color: #4CAF50; /* 버튼에 초록 계열 적용 */
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -102,7 +110,7 @@ layout: null
       transition: background-color 0.3s;
     }
     .custom-input button:hover {
-      background-color: #0056b3;
+      background-color: #43A047;
     }
     @media (max-width: 768px) {
       .custom-container, .rose-container {
@@ -212,7 +220,7 @@ layout: null
       // 예: renderCustomGraph(drinkingAmount, alcoholContent, bodyWeight);
     });
     
-    // IntersectionObserver를 이용하여 스크롤 시 페이드인 효과 적용
+    // IntersectionObserver를 이용하여 각 .fade-in 요소가 뷰포트에 들어올 때 나타나도록 함
     document.addEventListener('DOMContentLoaded', function() {
       const faders = document.querySelectorAll('.fade-in');
       const appearOptions = {
