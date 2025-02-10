@@ -9,81 +9,102 @@ layout: null
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>음주운전 관련 페이지</title>
+  <!-- Google Fonts: Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* 기본 리셋 및 스타일 */
+    /* 기본 리셋 및 전역 스타일 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Noto Sans KR', sans-serif;
       line-height: 1.6;
+      color: #444;
+      background-color: #f0f2f5;
+    }
+    h1, h2 {
       color: #333;
     }
+    p {
+      color: #555;
+    }
+    /* 섹션 스타일 */
     .section {
-      padding: 40px 20px;
-      min-height: 100vh;
-      border-bottom: 1px solid #ddd;
+      padding: 60px 20px;
+      margin: 40px auto;
+      max-width: 1100px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
-    h1 {
+    .section h1 {
       margin-bottom: 20px;
+      font-size: 2em;
+      text-align: center;
+      border-bottom: 2px solid #007BFF;
+      padding-bottom: 10px;
     }
-    /* Section 2: 사용자 맞춤형 그래프 및 입력 UI */
-    .custom-container {
+    .section p {
+      margin-bottom: 20px;
+      font-size: 1.1em;
+      text-align: center;
+    }
+    /* 레이아웃 컨테이너 */
+    .custom-container, .rose-container {
       display: flex;
       flex-wrap: wrap;
       gap: 20px;
+      justify-content: center;
+      align-items: stretch;
     }
-    .custom-graph, .custom-input {
+    .custom-graph, .custom-input, .rose-chart, .rose-description {
       flex: 1;
       min-width: 300px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #f8f8f8;
+      padding: 30px;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      background-color: #fafafa;
     }
+    /* 사용자 입력 폼 스타일 */
     .custom-input form {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 20px;
     }
     .custom-input label {
       font-weight: bold;
       margin-bottom: 5px;
+      color: #333;
     }
     .custom-input input {
-      padding: 10px;
+      padding: 12px;
       font-size: 1em;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
+      transition: border 0.3s;
+    }
+    .custom-input input:focus {
+      border-color: #007BFF;
+      outline: none;
     }
     .custom-input button {
-      padding: 10px;
+      padding: 12px;
       background-color: #007BFF;
       color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
       font-size: 1em;
+      transition: background-color 0.3s;
     }
     .custom-input button:hover {
       background-color: #0056b3;
     }
-    /* Section 3: rose 차트와 설명 */
-    .rose-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-    .rose-chart, .rose-description {
-      flex: 1;
-      min-width: 300px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #f8f8f8;
-    }
+    /* 반응형 디자인 */
     @media (max-width: 768px) {
       .custom-container, .rose-container {
         flex-direction: column;
@@ -171,7 +192,7 @@ layout: null
         체중: bodyWeight
       });
       
-      // 여기에 팀원이 구현한 맞춤형 그래프를 호출하는 함수를 추가하면 됩니다.
+      // 팀원이 구현한 맞춤형 그래프를 호출하는 함수를 여기에 추가하면 됩니다.
       // 예: renderCustomGraph(drinkingAmount, alcoholContent, bodyWeight);
     });
   </script>
