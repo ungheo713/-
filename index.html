@@ -112,12 +112,27 @@ layout: null
         flex-direction: column;
       }
     }
+    /* 페이드인 애니메이션 효과 (첫번째 섹션에 적용) */
+    .fade-in {
+      opacity: 0;
+      animation: fadeInEffect 2s ease-out forwards;
+    }
+    @keyframes fadeInEffect {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Section 1: 일반적인 혈중 알코올 농도 변화 그래프 -->
+  <!-- Section 1: 일반적인 혈중 알코올 농도 변화 그래프 (페이드인 효과 적용) -->
   <section id="general-graph" class="section">
-    <div>
+    <div class="fade-in">
       <h1>일반적인 혈중 알코올 농도 변화</h1>
       <p>이곳에는 팀원이 구현한 일반 케이스의 혈중 알코올 농도 변화 그래프가 표시됩니다.</p>
       <div id="generalGraph">
