@@ -33,7 +33,7 @@ layout: null
       height: 100%;
       overflow-y: scroll;
     }
-    /* 각 섹션이 뷰포트를 꽉 채우도록 (4개 섹션 모두 100vh) */
+    /* 각 섹션 (총 4개) */
     .section {
       height: 100vh;
       scroll-snap-align: start;
@@ -66,7 +66,7 @@ layout: null
       align-items: stretch;
       width: 100%;
     }
-    /* 사용자 입력 박스: 기존 카드 스타일 유지 */
+    /* 사용자 입력 박스 (오른쪽) : 카드 스타일 유지 */
     .custom-input {
       flex: 1;
       min-width: 300px;
@@ -76,7 +76,7 @@ layout: null
       background-color: #3A5F4C;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     }
-    /* 맞춤형 그래프 영역: 카드 스타일 제거하고 가득 채움 */
+    /* 맞춤형 그래프 영역 (왼쪽) : 카드 스타일 제거하여 가득 채움 */
     .custom-graph {
       flex: 2;
       min-width: 300px;
@@ -178,57 +178,55 @@ layout: null
       opacity: 1;
       transform: translateY(0);
     }
-    /* --- 해(태양) 요소 및 햇살 (Section 4부터 보임) --- */
-    /* #sun: 사분원 모양의 해 – 크기를 크게 하고, clip-path를 사용하여 top‑right에 딱 맞게 표시 */
-    #sun {
+    /* --- 태양(스un) 요소 (Section 4부터 나타남) --- */
+    /* #sun-container: 오른쪽 상단에 고정, 300x300px, 우측 상단 모서리에 딱 맞게 clip-path로 사분원만 노출 */
+    #sun-container {
       position: fixed;
       top: 0;
       right: 0;
       width: 300px;
       height: 300px;
-      background: radial-gradient(circle, #FFEE88, #FFC107);
-      /* clip-path: 원의 중심을 우측 상단에 두어 반지름 150px짜리 원의 일부(하단 좌측 사분원)만 노출 */
-      clip-path: circle(150px at 100% 0);
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
       z-index: 1000;
       pointer-events: none;
-      transition: filter 0.3s ease-out, opacity 0.3s ease-out;
       opacity: 0;
+      transition: filter 0.3s ease-out, opacity 0.3s ease-out;
     }
-    /* #sun-rays: 해에서 뻗어나오는 직선 햇살 */
-    #sun-rays {
-      position: fixed;
-      top: 0;
+    /* #sun: 태양 원 (150x150px), 우측 하단에 위치시켜 사분원 형태로 보이도록 함 */
+    #sun {
+      position: absolute;
+      bottom: 0;
       right: 0;
-      z-index: 999;
-      pointer-events: none;
-      transition: filter 0.3s ease-out, opacity 0.3s ease-out;
-      opacity: 0;
-    }
-    /* 두 ray는 모두 섹션 4의 경계(좌표: right:150px, top:150px)에서 시작 */
-    #sun-rays .ray.horizontal {
-      position: absolute;
-      top: 150px;
-      right: 150px;
       width: 150px;
-      height: 4px;
-      background: #FFC107;
-    }
-    #sun-rays .ray.vertical {
-      position: absolute;
-      top: 150px;
-      right: 150px;
-      width: 4px;
       height: 150px;
+      background: radial-gradient(circle, #FFEE88, #FFC107);
+      border-radius: 50%;
+    }
+    /* .ray: 태양의 일반적인 선 (8개) – #sun 내부에 배치, 중심에서 바깥쪽으로 뻗음 */
+    .ray {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      width: 2px;
+      height: 60px;
       background: #FFC107;
+      transform-origin: bottom center;
     }
   </style>
 </head>
 <body>
-  <!-- 해(태양)와 햇살 요소: Section 4가 보이기 시작하면 나타남 -->
-  <div id="sun"></div>
-  <div id="sun-rays">
-    <div class="ray horizontal"></div>
-    <div class="ray vertical"></div>
+  <!-- 태양 요소 (Section 4부터 보임): -->
+  <div id="sun-container">
+    <div id="sun">
+      <div class="ray" style="transform: translate(-50%, 0) rotate(0deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(45deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(90deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(135deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(180deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(225deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(270deg);"></div>
+      <div class="ray" style="transform: translate(-50%, 0) rotate(315deg);"></div>
+    </div>
   </div>
 
   <!-- Section 1: 일반적인 혈중 알코올 농도 변화 그래프 -->
@@ -364,28 +362,22 @@ layout: null
       });
     });
     
-    // 스크롤 이벤트: Section 4 (낮 시간대별 적발 건수)가 보이면 해(태양)와 햇살의 밝기를 조절
+    // 스크롤 이벤트: Section 4 (낮 시간대별 적발 건수)가 보이면 태양 요소의 밝기/투명도 조절
     window.addEventListener('scroll', function() {
-      const sun = document.getElementById('sun');
-      const rays = document.getElementById('sun-rays');
+      const sunContainer = document.getElementById('sun-container');
       const section4 = document.getElementById('daytime-arrests');
       const section4Top = section4.offsetTop;
       const windowBottom = window.scrollY + window.innerHeight;
       
       if(windowBottom > section4Top) {
-        // Section 4가 보이기 시작하면 스크롤에 따라 밝기 증가 (최대 3까지)
         let diff = windowBottom - section4Top;
         let brightnessFactor = 1 + diff / 300;
         if (brightnessFactor > 3) brightnessFactor = 3;
-        sun.style.filter = 'brightness(' + brightnessFactor + ')';
-        sun.style.opacity = 1;
-        rays.style.filter = 'brightness(' + brightnessFactor + ')';
-        rays.style.opacity = 1;
+        sunContainer.style.filter = 'brightness(' + brightnessFactor + ')';
+        sunContainer.style.opacity = 1;
       } else {
-        sun.style.filter = 'brightness(1)';
-        sun.style.opacity = 0;
-        rays.style.filter = 'brightness(1)';
-        rays.style.opacity = 0;
+        sunContainer.style.filter = 'brightness(1)';
+        sunContainer.style.opacity = 0;
       }
     });
   </script>
