@@ -29,11 +29,11 @@ layout: null
       font-family: 'Noto Sans KR', sans-serif;
       line-height: 1.6;
       background-color: #2E473B; /* 어두운 초록 계열 배경 */
-      color: #F0F0F0;  /* 밝은 텍스트 색상 */
+      color: #F0F0F0;
       height: 100%;
       overflow-y: scroll;
     }
-    /* 각 섹션이 뷰포트를 꽉 채우도록 설정 */
+    /* 각 섹션이 뷰포트를 꽉 채우도록 설정 (4개 섹션 모두 100vh) */
     .section {
       height: 100vh;
       scroll-snap-align: start;
@@ -57,7 +57,7 @@ layout: null
       text-align: center;
       color: #D0D0D0;
     }
-    /* 레이아웃 컨테이너 (맞춤형 그래프, rose 차트 섹션 내부) */
+    /* 레이아웃 컨테이너 (Section 2, Section 3) */
     .custom-container, .rose-container {
       display: flex;
       flex-wrap: wrap;
@@ -66,27 +66,38 @@ layout: null
       align-items: stretch;
       width: 100%;
     }
-    /* 원래 카드 스타일 (맞춤형 입력 박스, rose 차트, 설명 등) */
-    .custom-input, .rose-chart, .rose-description {
+    /* Section 2 - 맞춤형 혈중 알코올 농도 그래프 */
+    /* 정보 입력 박스: 기존 카드 스타일 유지 */
+    .custom-input {
       flex: 1;
       min-width: 300px;
       padding: 20px;
       border: 1px solid rgba(255,255,255,0.3);
       border-radius: 10px;
-      background-color: #3A5F4C; /* 약간 밝은 초록 계열 카드 */
+      background-color: #3A5F4C;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     }
-    /* 맞춤형 그래프 영역: 카드 스타일 제거 및 왼쪽 영역에 가득 채우기 */
+    /* 맞춤형 그래프 영역: 카드 스타일 제거, 왼쪽 영역에 가득 채움 */
     .custom-graph {
-      flex: 2;  /* 입력 박스보다 넓게 */
+      flex: 2;
       min-width: 300px;
-      padding: 0;        /* 패딩 제거 */
-      border: none;      /* 테두리 제거 */
-      border-radius: 0;  /* 둥근 모서리 제거 */
-      background: transparent; /* 배경 제거 */
-      box-shadow: none;  /* 그림자 제거 */
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
     }
-    /* 사용자 입력 폼 스타일 */
+    /* Section 3 - 음주운전 사망자 통계: rose 차트 및 설명 */
+    .rose-chart, .rose-description {
+      flex: 1;
+      min-width: 300px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 10px;
+      background-color: #3A5F4C;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    }
+    /* 사용자 입력 폼 스타일 (Section 2) */
     .custom-input form {
       display: flex;
       flex-direction: column;
@@ -112,7 +123,7 @@ layout: null
     }
     .custom-input button {
       padding: 12px;
-      background-color: #4CAF50; /* 버튼에 초록 계열 적용 */
+      background-color: #4CAF50;
       color: #fff;
       border: none;
       border-radius: 6px;
@@ -123,9 +134,34 @@ layout: null
     .custom-input button:hover {
       background-color: #43A047;
     }
+    /* Section 4 - 낮 시간대별 음주운전 적발 건수 */
+    .daytime-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
+    }
+    /* 왼쪽 영역: 차트 (약 60% 너비) */
+    .chart-section {
+      flex: 1 1 60%;
+      padding: 20px;
+    }
+    /* 오른쪽 영역: 설명 (약 35% 너비) */
+    .text-section {
+      flex: 1 1 35%;
+      padding: 20px;
+      border-left: 1px solid rgba(255,255,255,0.3);
+    }
+    /* 반응형 레이아웃 */
     @media (max-width: 768px) {
-      .custom-container, .rose-container {
+      .custom-container, .rose-container, .daytime-container {
         flex-direction: column;
+      }
+      .text-section {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.3);
       }
     }
     /* 페이드인 효과: 초기엔 투명하고 아래로 치우친 상태 */
@@ -139,9 +175,27 @@ layout: null
       opacity: 1;
       transform: translateY(0);
     }
+    /* 해(태양) 요소 스타일 (Section 4에만 적용) */
+    #sun {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFEE88 0%, #FFC107 70%);
+      filter: brightness(1);
+      z-index: 1000;
+      pointer-events: none;
+      transition: filter 0.3s ease-out, opacity 0.3s ease-out;
+      opacity: 0; /* 기본은 보이지 않다가 Section 4가 보이면 나타남 */
+    }
   </style>
 </head>
 <body>
+  <!-- 해(태양) 요소: Section 4에서 보이도록 제어 -->
+  <div id="sun"></div>
+
   <!-- Section 1: 일반적인 혈중 알코올 농도 변화 그래프 -->
   <section id="general-graph" class="section">
     <div class="fade-in">
@@ -153,19 +207,18 @@ layout: null
     </div>
   </section>
 
-  <!-- Section 2: 사용자 맞춤형 그래프 및 입력 UI -->
+  <!-- Section 2: 사용자 맞춤형 혈중 알코올 농도 그래프 및 입력 UI -->
   <section id="custom-graph" class="section">
     <div class="fade-in">
       <h1>맞춤형 혈중 알코올 농도 그래프</h1>
       <div class="custom-container">
-        <!-- 좌측: 맞춤형 그래프 영역 (박스 스타일 제거 및 가득 채움) -->
+        <!-- 왼쪽: 맞춤형 그래프 영역 (가득 채움) -->
         <div class="custom-graph">
-          <!-- 여기에 팀원이 구현한 맞춤형 그래프 코드가 가득 채워져 삽입됩니다. -->
           <div id="customGraph">
             <!-- [Placeholder] 맞춤형 그래프 코드 삽입 -->
           </div>
         </div>
-        <!-- 우측: 사용자 입력 폼 (기존 스타일 유지) -->
+        <!-- 오른쪽: 사용자 입력 폼 (기존 스타일 유지) -->
         <div class="custom-input">
           <h2>정보 입력</h2>
           <form id="userInputForm">
@@ -189,18 +242,18 @@ layout: null
   </section>
 
   <!-- Section 3: 음주운전 사망자 통계 (rose 차트와 설명) -->
-  <section id="rose-chart-section" class="section">
+  <section id="fatality-stats" class="section">
     <div class="fade-in">
       <h1>음주운전 사망자 통계</h1>
       <div class="rose-container">
-        <!-- 좌측: rose 차트 영역 -->
+        <!-- 왼쪽: rose 차트 영역 -->
         <div class="rose-chart">
           <h2>Rose 차트</h2>
           <div id="roseChart">
             <!-- [Placeholder] rose 차트 코드 삽입 -->
           </div>
         </div>
-        <!-- 우측: 차트 설명 -->
+        <!-- 오른쪽: 차트 설명 -->
         <div class="rose-description">
           <h2>설명</h2>
           <p>
@@ -212,8 +265,32 @@ layout: null
     </div>
   </section>
 
+  <!-- Section 4: 낮 시간대별 음주운전 적발 건수 (새로운 섹션) -->
+  <section id="daytime-arrests" class="section">
+    <div class="fade-in">
+      <h1>낮 시간대별 음주운전 적발 건수</h1>
+      <div class="daytime-container">
+        <!-- 왼쪽 영역: 차트 영역 (placeholder) -->
+        <div class="chart-section">
+          <div id="daytimeChart">
+            <!-- [Placeholder] 팀원이 구현한 낮 시간대별 적발 건수 rose 차트 코드 삽입 -->
+          </div>
+        </div>
+        <!-- 오른쪽 영역: 설명 텍스트 -->
+        <div class="text-section">
+          <h2>설명</h2>
+          <p>
+            이 차트는 낮 시간대별 음주운전 적발 건수를 시각적으로 나타냅니다.<br>
+            각 시간대별 적발 건수를 분석하여, 음주운전 발생 패턴과<br>
+            단속의 효과를 파악할 수 있습니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <script>
-    // 사용자 입력 폼 제출 이벤트 처리
+    // 사용자 입력 폼 제출 이벤트 처리 (Section 2)
     document.getElementById('userInputForm').addEventListener('submit', function(event) {
       event.preventDefault();
       
@@ -250,6 +327,27 @@ layout: null
       faders.forEach(fader => {
         appearOnScroll.observe(fader);
       });
+    });
+    
+    // 해(태양) 효과: Section 4가 보일 때부터 적용 (Section 4 id: "daytime-arrests")
+    window.addEventListener('scroll', function() {
+      const sun = document.getElementById('sun');
+      const section4 = document.getElementById('daytime-arrests');
+      // section4의 위치 계산 (문서 상단에서의 offset)
+      const section4Top = section4.offsetTop;
+      const windowBottom = window.scrollY + window.innerHeight;
+      
+      if(windowBottom > section4Top) {
+        // Section 4가 보이기 시작하면, 스크롤이 내려갈수록 밝기 증가
+        let diff = windowBottom - section4Top;
+        let brightnessFactor = 1 + diff / 300; // 조절값: 300으로 나눔
+        if (brightnessFactor > 3) brightnessFactor = 3;
+        sun.style.filter = 'brightness(' + brightnessFactor + ')';
+        sun.style.opacity = 1;
+      } else {
+        sun.style.filter = 'brightness(1)';
+        sun.style.opacity = 0;
+      }
     });
   </script>
 </body>
