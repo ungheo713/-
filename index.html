@@ -178,55 +178,89 @@ layout: null
       opacity: 1;
       transform: translateY(0);
     }
-    /* --- 태양(스un) 요소 (Section 4부터 나타남) --- */
-    /* #sun-container: 오른쪽 상단에 고정, 300x300px, 우측 상단 모서리에 딱 맞게 clip-path로 사분원만 노출 */
+    /* --- 태양 요소 (Section 4부터 나타남) --- */
+    /* #sun-container: fixed한 컨테이너를 오른쪽 상단에 배치 */
+    /* 크기를 작게(예: 75x75) 설정하고, 내부에서 큰 태양의 한 사분원만 보이도록 함 */
     #sun-container {
       position: fixed;
       top: 0;
       right: 0;
-      width: 300px;
-      height: 300px;
-      clip-path: polygon(100% 0, 100% 100%, 0 100%);
-      z-index: 1000;
+      width: 75px;
+      height: 75px;
       pointer-events: none;
-      opacity: 0;
       transition: filter 0.3s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+      z-index: 1000;
     }
-    /* #sun: 태양 원 (150x150px), 우측 하단에 위치시켜 사분원 형태로 보이도록 함 */
+    /* #sun-clip: 이 컨테이너에서만 태양의 한 사분원이 보임 */
+    #sun-clip {
+      width: 75px;
+      height: 75px;
+      overflow: hidden;
+    }
+    /* #sun: 전체 태양(원) – 150x150px, border-radius:50%; */
+    /* 태양의 위치를 조정하여, 그 중 상단 우측(즉, 태양의 top-right quadrant)이 #sun-clip에 노출됨 */
     #sun {
       position: absolute;
-      bottom: 0;
-      right: 0;
       width: 150px;
       height: 150px;
-      background: radial-gradient(circle, #FFEE88, #FFC107);
       border-radius: 50%;
+      background: radial-gradient(circle, #FFC107, #FF9800);
+      top: 0;
+      left: -75px;  /* 이렇게 하면 sun의 x좌표 75~150이 #sun-clip에 보임 → top-right quadrant */
     }
-    /* .ray: 태양의 일반적인 선 (8개) – #sun 내부에 배치, 중심에서 바깥쪽으로 뻗음 */
+    /* #sun-rays: 태양에서 방사형으로 뻗어 나가는 선들 */
+    /* 컨테이너는 #sun-container와 같은 위치에 배치하고, overflow는 허용 */
+    #sun-rays {
+      position: fixed;
+      top: 0;
+      right: 0;
+      pointer-events: none;
+      transition: filter 0.3s ease-out, opacity 0.3s ease-out;
+      opacity: 0;
+      z-index: 999;
+    }
+    /* 태양 ray들은 자연스러운 선 모양 (선형 그라데이션 적용) */
     .ray {
       position: absolute;
-      bottom: 50%;
-      left: 50%;
+      background: linear-gradient(to bottom, #FF9800, transparent);
+    }
+    /* 수평 ray: 태양의 오른쪽 경계에서 오른쪽으로 뻗음 */
+    .ray.horizontal {
+      top: 20px;
+      left: 75px;
+      width: 50px;
+      height: 2px;
+    }
+    /* 수직 ray: 태양의 위쪽 경계에서 위로 뻗음 */
+    .ray.vertical {
+      top: -30px;
+      left: 20px;
       width: 2px;
-      height: 60px;
-      background: #FFC107;
-      transform-origin: bottom center;
+      height: 50px;
+      background: linear-gradient(to right, #FF9800, transparent);
+    }
+    /* 대각선 ray: 태양의 모서리에서 대각선 방향으로 뻗음 */
+    .ray.diagonal {
+      top: -20px;
+      left: 60px;
+      width: 2px;
+      height: 40px;
+      transform: rotate(-45deg);
     }
   </style>
 </head>
 <body>
-  <!-- 태양 요소 (Section 4부터 보임): -->
+  <!-- 태양 요소 (Section 4부터 보이도록 제어) -->
   <div id="sun-container">
-    <div id="sun">
-      <div class="ray" style="transform: translate(-50%, 0) rotate(0deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(45deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(90deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(135deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(180deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(225deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(270deg);"></div>
-      <div class="ray" style="transform: translate(-50%, 0) rotate(315deg);"></div>
+    <div id="sun-clip">
+      <div id="sun"></div>
     </div>
+  </div>
+  <div id="sun-rays">
+    <div class="ray horizontal"></div>
+    <div class="ray vertical"></div>
+    <div class="ray diagonal"></div>
   </div>
 
   <!-- Section 1: 일반적인 혈중 알코올 농도 변화 그래프 -->
@@ -337,16 +371,13 @@ layout: null
         체중: bodyWeight
       });
       
-      // 팀원이 구현한 맞춤형 그래프를 호출하는 함수를 여기에 추가하면 됩니다.
-      // 예: renderCustomGraph(drinkingAmount, alcoholContent, bodyWeight);
+      // 팀원이 구현한 맞춤형 그래프 호출 함수 (예: renderCustomGraph(...)) 추가 가능
     });
     
-    // IntersectionObserver를 이용하여 각 .fade-in 요소가 뷰포트에 들어올 때 나타나도록 함
+    // IntersectionObserver를 이용한 페이드인 효과
     document.addEventListener('DOMContentLoaded', function() {
       const faders = document.querySelectorAll('.fade-in');
-      const appearOptions = {
-        threshold: 0.2
-      };
+      const appearOptions = { threshold: 0.2 };
       
       const appearOnScroll = new IntersectionObserver(function(entries, observer) {
         entries.forEach(entry => {
@@ -362,22 +393,28 @@ layout: null
       });
     });
     
-    // 스크롤 이벤트: Section 4 (낮 시간대별 적발 건수)가 보이면 태양 요소의 밝기/투명도 조절
+    // 스크롤 이벤트: Section 4가 보이면 태양 요소(컨테이너와 ray)의 밝기와 불투명도 조절
     window.addEventListener('scroll', function() {
       const sunContainer = document.getElementById('sun-container');
+      const sunRays = document.getElementById('sun-rays');
       const section4 = document.getElementById('daytime-arrests');
       const section4Top = section4.offsetTop;
       const windowBottom = window.scrollY + window.innerHeight;
       
-      if(windowBottom > section4Top) {
+      if (windowBottom > section4Top) {
+        // Section 4가 보이기 시작하면 스크롤 내림에 따라 태양 효과 증가 (최대 배율 2로 제한)
         let diff = windowBottom - section4Top;
         let brightnessFactor = 1 + diff / 300;
-        if (brightnessFactor > 3) brightnessFactor = 3;
+        if (brightnessFactor > 2) brightnessFactor = 2;
         sunContainer.style.filter = 'brightness(' + brightnessFactor + ')';
         sunContainer.style.opacity = 1;
+        sunRays.style.filter = 'brightness(' + brightnessFactor + ')';
+        sunRays.style.opacity = 1;
       } else {
         sunContainer.style.filter = 'brightness(1)';
         sunContainer.style.opacity = 0;
+        sunRays.style.filter = 'brightness(1)';
+        sunRays.style.opacity = 0;
       }
     });
   </script>
